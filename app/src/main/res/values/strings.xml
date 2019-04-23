@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="btn_load">Load</string>
+    <string name="str_dailquote">每日一字</string>
+    <string name="str_aqipublishtime">PublishTime:</string>
+</resources>
