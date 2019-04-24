@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.example.myapplication.aqi.AQIPresenter;
 import com.example.myapplication.dailquote.DQPresenter;
 import com.example.myapplication.MyHScrollView.OnScrollChangedListener;
+import com.example.myapplication.data.SqliteController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
         aqiListView.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
 
         loadingDialog = new ProgressDialog(this);
+        loadingDialog.setCanceledOnTouchOutside(false);
         loadingDialog.setTitle("Loading . . . . . ");
         mErrorCount = 0; // 190424_t+ >= 2 關閉loadingDialog視窗
         dailyQuote = new DQPresenter(this);
@@ -308,6 +310,10 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
             holder.latitude.setText(mItemList.get(position).get("latitude"));
 
             holder.delete.setOnClickListener(new ItemButton_Click(parentView.getContext(), convertView, position));
+            if ((position % 2) == 1) // 190425_t+ 增加底色
+                convertView.setBackgroundColor(Color.parseColor("#C9E2F3CA"));
+            else
+                convertView.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
             return convertView;
         }
@@ -341,16 +347,19 @@ public class MainActivity extends AppCompatActivity implements IMainActivity {
                 // 刪除listview選擇的item
                 // listview removeViewAt 無法直接刪除
                 try {
-                    mItemList.remove(position);
-                    ((AQIAdapter)aqiListView.getAdapter()).notifyDataSetChanged();
-                    if (mItemList.size() > 0)
-                        publishTime.setText("DataCount: " + mItemList.size() + " PublishTime :" + mItemList.get(0).get("publishtime"));
-                    else
-                        publishTime.setText("DataCount: " + mItemList.size() + " PublishTime :");
-                    //((AQIAdapter)v.getContext()).getAdapter().notifyDataSetChanged;
-                    //((ListView)context).getAdapter().notifyDataSetChanged();
-                    //((AQIAdapter)mainActivity.aqiListView.getAdapter()).notifyDataSetChanged();
-                    //mainActivity.aqiListView.removeViewAt(1);
+                    SqliteController sqlctrl = new SqliteController(context);
+                    if (sqlctrl.deleteAQIContents(mItemList.get(position))) {
+                        mItemList.remove(position);
+                        ((AQIAdapter) aqiListView.getAdapter()).notifyDataSetChanged();
+                        if (mItemList.size() > 0)
+                            publishTime.setText("DataCount: " + mItemList.size() + " PublishTime :" + mItemList.get(0).get("publishtime"));
+                        else
+                            publishTime.setText("DataCount: " + mItemList.size() + " PublishTime :");
+                        //((AQIAdapter)v.getContext()).getAdapter().notifyDataSetChanged;
+                        //((ListView)context).getAdapter().notifyDataSetChanged();
+                        //((AQIAdapter)mainActivity.aqiListView.getAdapter()).notifyDataSetChanged();
+                        //mainActivity.aqiListView.removeViewAt(1);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

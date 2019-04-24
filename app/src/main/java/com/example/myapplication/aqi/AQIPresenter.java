@@ -14,7 +14,7 @@ public class AQIPresenter {
 
     public AQIPresenter(IMainActivity iMainActivity) {
         this.iMainActivityView = iMainActivity;
-        iAQIMode = new AQIMode();
+        iAQIMode = new AQIMode(iMainActivityView);
         handler = new Handler();
     }
 

@@ -73,12 +73,12 @@ public class JsoupUtil {
                 // boolean redirect = false;
                 //String redirectURL = httpAddress;
                 List<Map<String,String>>  aqiArrayList = new ArrayList<>();
-                String dataTitle = "";
+                //String dataTitle = "";
 
                 trustEveryone();
                 try {
                     URL url = new URL(httpAddress);
-                    Document doc = Jsoup.parse(url, 15000); //使用Jsoup解析網頁
+                    Document doc = Jsoup.parse(url, 20000); //使用Jsoup解析網頁
                     //Document doc = Jsoup.connect(httpAddress).validateTLSCertificates(false).timeout(5000).get();
                     //Jsoup.connect(httpAddress).validateTLSCertificates(false).timeout(5000).execute();
 
@@ -88,8 +88,8 @@ public class JsoupUtil {
                     for (Element row : tRows) {
                         Map<String,String> rowData = new HashMap<>();
                         Elements tds = row.select("td p");
-                        Log.i("JsoupTag","tds_ " + tds.size()  + ":" + tds.text());
-                        dataTitle = "";
+                        //Log.i("JsoupTag","tds_ " + tds.size()  + ":" + tds.text());
+                        //dataTitle = "";
                         for (int j = 0; j < tds.size(); j++) {
                             if (j == 17) {
                                 Log.i("JsoupTag", "tdd:" + tds.get(j).text());
@@ -97,8 +97,8 @@ public class JsoupUtil {
                                 //sqliteController.checkCPTime(tds.get(j).text());
                             }
                             rowData.put(SqliteTable.getAqiContentsColName(j),tds.get(j).text());
-                            dataTitle += " ";
-                            dataTitle += tds.get(j).text();
+                            //dataTitle += " ";
+                            //dataTitle += tds.get(j).text();
                         }
 
                         aqiArrayList.add(rowData);
@@ -113,7 +113,7 @@ public class JsoupUtil {
                         }
                         */
 
-                        Log.i("JsoupTag","rowData:" + rowData.toString());
+                        //Log.i("JsoupTag","rowData:" + rowData.toString());
                         // break;
                     }
                     /*
